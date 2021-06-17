@@ -1,0 +1,34 @@
+1051 = pvp par swap
+1052 = pvp par swap
+1052 = pvp art swap
+1054 = pvp par swap
+1055 =  good
+1056 = pvp par swap
+1057 = I can't tell, both series has the same size
+1058 = pvp par swap
+1059 = pvp par swap
+1060 = pvp par swap 
+1061 = pvp par swap
+1062 = pvp par swap
+1063 = pvp par swap
+1064 = pvp par swap
+1065 = pvp par swap
+1066 = par doesnt have bb
+1067 = pvp par swap
+1068 = correct
+1069 = pvp par swap
+1097 = doesnt contain bb for par
+1098 = doesnt contain bb for art
+
+Detail annotations
+•	\Pancreas_BB\Detail annotaties\Detail Vaat(-)\1053\art\Patient 1053_1053\No study description\Patient 1053 Art. S __(12-15-2020_11-32-57-7556)\Patient 1053 Art. S _VMI_(12-15-2020_11-32-57-7556) > Vena porta
+•	\Pancreas_BB\Detail annotaties\Detail Vaat(-)\1090\par\Patient 1090_1090\No study description\Patient 1090 Par. S__(02-02-2021_15-42-28-4106)\ Patient 1090 Par. S_Tumour_(02-02-2021_15-42-28-4106).vtk > Tumour
+•	94 liver - Patient 1094 LL. S_Abb. a. Hep_(02-02-2021_15-59-11-2256) instead of Truncus
+•	98 pvp – missing Gastroduodenalis
+•	1100 pvp – Tumour rename
+
+CT Scans
+Case 1075 is missing a CONTENT.XML, I dont know which series is which 
+
+Case 1083
+
