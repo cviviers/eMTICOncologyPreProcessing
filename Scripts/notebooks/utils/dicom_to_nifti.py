@@ -419,7 +419,7 @@ def full3D_all_labels(data_path, label_path, output_dir, number, phase):
 
 def seperate_labels(data_path, label_path, output_dir, number, phase):
 
-    annotations = ['Gastroduodenalis', 'AMS', 'Aorta', 'Pancreas', 'Splenic vein', 'Truncus', 'Vena Cava', 'Vena porta', 'VMI', 'Tumour',  'Abb', 'Hep']
+    annotations = ['Gastroduodenalis', 'AMS', 'Aorta', 'Pancreas', 'Splenic vein', 'Truncus', 'Vena Cava', 'Vena porta', 'VMI', 'Tumour',  'Abb', 'Hep', 'CBD', 'PD']
 
     if not os.path.exists(label_path):
         return
@@ -430,8 +430,8 @@ def seperate_labels(data_path, label_path, output_dir, number, phase):
 
 
     output = os.path.join(output_dir,  number, phase)
-    output_label = os.path.join(output, 'labelsTr')
-    output_image = os.path.join(output, 'imagesTr')
+    output_label = os.path.join(output, 'labels')
+    output_image = os.path.join(output, 'images')
 
     if not os.path.exists(output_label):
         os.makedirs(output_label)
@@ -536,6 +536,74 @@ def seperate_labels(data_path, label_path, output_dir, number, phase):
                 else:
                     print(f"Failed to find {ann} ")
 
+        metadata = reader.GetMetaDataDictionary()
+        print('metadata: ', metadata)
+
+        data_writer = itk.ImageFileWriter[ImageType].New()
+        outFileName = os.path.join(output_image, series_name + '.nii.gz')
+        data_writer.SetFileName(outFileName)
+        data_writer.UseCompressionOn()
+        data_writer.UseInputMetaDataDictionaryOn ()
+        data_writer.SetInput(reader.GetOutput())
+
+        print('Writing: ' + outFileName)
+        data_writer.Update()
+
+        if seriesFound:
+            break 
+
+
+def scan_only(data_path, output_dir, number, phase):
+
+
+    PixelType = itk.ctype('signed short')
+    Dimension = 3
+    ImageType = itk.Image[PixelType, Dimension]
+
+    output = os.path.join(output_dir,  number, phase)
+    output_image = os.path.join(output, 'images')
+
+
+    if not os.path.exists(output_image):
+        os.makedirs(output_image)
+
+    namesGenerator = itk.GDCMSeriesFileNames.New()
+    namesGenerator.SetUseSeriesDetails(True)
+    namesGenerator.AddSeriesRestriction("0008|0021")
+    namesGenerator.SetGlobalWarningDisplay(False)
+    namesGenerator.SetDirectory(data_path)
+
+    seriesUID = namesGenerator.GetSeriesUIDs()
+    series_name = phase + '_' + number
+
+    if len(seriesUID) < 1:
+        print('No DICOMs in: ' + data_path)
+        return
+
+    seriesFound = False
+    for uid in seriesUID:
+        seriesIdentifier = uid
+
+        print('Reading: ' + seriesIdentifier)
+
+        fileNames = namesGenerator.GetFileNames(seriesIdentifier)
+
+        reader = itk.ImageSeriesReader[ImageType].New()
+        dicomIO = itk.GDCMImageIO.New()
+        reader.SetImageIO(dicomIO)
+        reader.SetFileNames(fileNames)
+        reader.ForceOrthogonalDirectionOff()
+        #reader.Update()
+
+        size = itk.size(reader.GetOutput())
+        print("reader")
+        print(size)
+        print(reader.GetOutput())
+
+        if size[2] <=2:
+            break
+
+        
         metadata = reader.GetMetaDataDictionary()
         print('metadata: ', metadata)
 
