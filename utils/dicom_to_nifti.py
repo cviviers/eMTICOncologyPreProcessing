@@ -428,7 +428,7 @@ def seperate_labels(data_path, label_path, output_dir, number, phase):
     Dimension = 3
     ImageType = itk.Image[PixelType, Dimension]
 
-
+    number = str(int(number)+1900)
     output = os.path.join(output_dir,  number, phase)
     output_label = os.path.join(output, 'labels')
     output_image = os.path.join(output, 'images')
@@ -534,7 +534,11 @@ def seperate_labels(data_path, label_path, output_dir, number, phase):
                     print(f"Multiple labels for {ann} ")
 
                 else:
-                    print(f"Failed to find {ann} ")
+                    if ann == 'Tumour' or ann == 'Pancreas':
+                        print(f"Failed to find {ann} ")
+                        break
+                    else: 
+                        print(f"Failed to find {ann}, but its ok! ")
 
         metadata = reader.GetMetaDataDictionary()
         print('metadata: ', metadata)
@@ -553,15 +557,15 @@ def seperate_labels(data_path, label_path, output_dir, number, phase):
             break 
 
 
-def scan_only(data_path, output_dir, number, phase):
+def scan_only(data_path, output_dir, patient_number, addition):
 
 
     PixelType = itk.ctype('signed short')
     Dimension = 3
     ImageType = itk.Image[PixelType, Dimension]
 
-    output = os.path.join(output_dir,  number, phase)
-    output_image = os.path.join(output, 'images')
+    # output = os.path.join(output_dir,  number, )
+    output_image = os.path.join(output_dir, 'images')
 
 
     if not os.path.exists(output_image):
@@ -574,7 +578,7 @@ def scan_only(data_path, output_dir, number, phase):
     namesGenerator.SetDirectory(data_path)
 
     seriesUID = namesGenerator.GetSeriesUIDs()
-    series_name = phase + '_' + number
+    series_name ='patient_'+ patient_number + '_' + addition
 
     if len(seriesUID) < 1:
         print('No DICOMs in: ' + data_path)
